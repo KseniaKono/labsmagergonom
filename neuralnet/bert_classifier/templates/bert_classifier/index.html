@@ -10,9 +10,13 @@
         {% if task.task_name == "Text Classification" %}
             <li><a href="{% url 'bert_classifier:detail' task.id %}">{{ task.task_name }}</a></li>
         {% endif %}
+        {% if task.task_name == "Dialog Bot" %}
+            <li><a href="{% url 'dialog_bot:detail' task.id %}">{{ task.task_name }}</a></li>
+        {% endif %}
 
     {% endfor %}
 </ul>
+
 {% else %}
 <p>No tasks are available.</p>
 {% endif %}
