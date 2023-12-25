@@ -4,40 +4,38 @@
 
 {% block content %}
 
-<h2>{{task.task_name}}</h2>
+<div class="container mt-5">
 
-<form action="{% url 'bert_classifier:index' %}" method="POST">
+    <h2>{{ task.task_name }}</h2>
 
-    {% csrf_token %}
+    <form action="{% url 'bert_classifier:index' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">На главную</button>
+    </form>
 
-    <button type="submit">На главную</button>
+    <hr>
 
-</form>
+    <div class="text-center">
+        {% if latest_predictions %}
+            {% for p in latest_predictions %}
+                <div class="border rounded p-3 mb-4 d-inline-block border-dark" style="background-color: #f8f9fa; margin-right:5px;"> <!-- Контейнер с рамкой и фоном -->
+                    <strong>{{ p.input_data }}</strong>
+                    <pre>{{ p.output_data }}</pre>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Нет предыдущих результатов.</p>
+        {% endif %}
+    </div>
 
-<hr>
+    <hr>
 
-    {% if latest_predictions %}
+    <form action="{% url 'bert_classifier:predict' task.id %}" method="POST" class="text-center">
+        {% csrf_token %}
+        <textarea name="text" required="" placeholder="Введите текст" cols="145" rows="7"></textarea><br>
+         <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Классифицировать текст</button>
+    </form>
 
-        {% for p in latest_predictions %}
-            <p>
-                <strong>{{p.input_data}}</strong>
-                <pre>{{p.output_data}}</pre>
-            </p>
-        {% endfor %}
-
-    {% else %}
-    Нет предыдущих результатов.
-    {% endif %}
-
-</hr>
-
-<form action="{% url 'bert_classifier:predict' task.id %}" method="POST">
-
-    {% csrf_token %}
-
-    <textarea name="text" required="" placeholder="Введите текст" cols="70" rows="10"></textarea><br>
-    <button type="submit">Классифицировать текст</button>
-
-</form>
+</div>
 
 {% endblock %}

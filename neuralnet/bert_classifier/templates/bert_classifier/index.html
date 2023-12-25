@@ -4,25 +4,29 @@
 
 {% load static %}
 <link rel="stylesheet" href="{% static 'bert_classifier/style.css' %}">
+
 {% if tasks_list %}
-<ul>
-    {% for task in tasks_list %}
-        {% if task.task_name == "Text Classification" %}
-            <li><a href="{% url 'bert_classifier:detail' task.id %}">{{ task.task_name }}</a></li>
-        {% endif %}
-        {% if task.task_name == "Image Classification" %}
-            <li><a href="{% url 'image_classification:detail' task.id %}">{{ task.task_name }}</a></li>
-        {% endif %}
-        {% if task.task_name == "Dialog Bot" %}
-            <li><a href="{% url 'dialog_bot:detail' task.id %}">{{ task.task_name }}</a></li>
-        {% endif %}
-
-    {% endfor %}
-</ul>
-
-
+    <ul class="list-group">
+        {% for task in tasks_list %}
+            {% if task.task_name == "Text Classification" %}
+                <li class="list-group-item" style="border: none;">
+                    <a href="{% url 'bert_classifier:detail' task.id %}" class="btn btn-primary">{{ task.task_name }}</a>
+                </li>
+            {% endif %}
+            {% if task.task_name == "Image Classification" %}
+                <li class="list-group-item" style="border: none;">
+                    <a href="{% url 'image_classification:detail' task.id %}" class="btn btn-primary">{{ task.task_name }}</a>
+                </li>
+            {% endif %}
+            {% if task.task_name == "Dialog Bot" %}
+                <li class="list-group-item" style="border: none;">
+                    <a href="{% url 'dialog_bot:detail' task.id %}" class="btn btn-primary">{{ task.task_name }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
 {% else %}
-<p>No tasks are available.</p>
+    <p>No tasks are available.</p>
 {% endif %}
 
 {% endblock %}

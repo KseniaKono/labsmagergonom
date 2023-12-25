@@ -4,39 +4,40 @@
 
 {% block content %}
 
-<h2>{{task.task_name}}</h2>
+<div class="container">
 
-<form action="{% url 'bert_classifier:index' %}" method="POST">
+    <h2>{{ task.task_name }}</h2>
 
-    {% csrf_token %}
+    <form action="{% url 'bert_classifier:index' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">На главную</button>
+    </form>
 
-    <button type="submit">На главную</button>
-
-</form>
-
-<hr>
+    <hr>
 
     {% if latest_predictions %}
 
         {% for p in latest_predictions %}
-            <p>
+            <div class="my-3 text-center">
                 <strong>Image</strong><br>
-                <img src="{{ p.image.url }}" alt="img" style="max-height:200px"><br>
+                <img src="{{ p.image.url }}" alt="img" style="max-height:2000px" class="mx-auto d-block"><br>
                 <strong>Prediction:</strong>
                 <pre>{{ p.image_class }}</pre>
-            </p>
+            </div>
         {% endfor %}
 
     {% else %}
-    Нет предыдущих результатов.
+        <p class="lead">Нет предыдущих результатов.</p>
     {% endif %}
 
-</hr>
+    <hr>
 
-<form action="{% url 'image_classification:predict' task.id %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Загрузить</button>
-</form>
+    <form action="{% url 'image_classification:predict' task.id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Загрузить</button>
+    </form>
+
+</div>
 
 {% endblock %}

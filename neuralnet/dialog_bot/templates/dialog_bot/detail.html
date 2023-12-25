@@ -4,40 +4,40 @@
 
 {% block content %}
 
-<h2>{{task.task_name}}</h2>
+<div class="container mt-3">
+    <div>
 
-<form action="{% url 'bert_classifier:index' %}" method="POST">
+        <h2>{{task.task_name}}</h2>
 
-    {% csrf_token %}
+        <form action="{% url 'bert_classifier:index' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">На главную</button>
+        </form>
 
-    <button type="submit">На главную</button>
+        <hr>
 
-</form>
+        {% if latest_predictions %}
+            {% for p in latest_predictions %}
+                <p>
+                            <div class="border border-primary p-3 mb-3 {% if p.is_user_message %}bg-primary text-white{% else %}bg-light text-dark{% endif %} rounded">
+            <strong>Вы: {{ p.input_data }}</strong>
+        </div>
+                <div class="border border-secondary p-3 {% if p.is_user_message %}bg-light text-dark{% else %}bg-secondary text-white{% endif %} rounded">
+            <p>Бот: {{ p.output_data }}</p>
+        </div>
+                </p>
+            {% endfor %}
+        {% else %}
+            Нет предыдущих результатов.
+        {% endif %}
 
-<hr>
+        <form action="{% url 'dialog_bot:predict' task.id %}" method="POST">
+            {% csrf_token %}
+            <textarea name="text" required="" placeholder="Введите текст" class="form-control" rows="5"></textarea><br>
+            <button type="submit" class="btn btn-primary">Отправить сообщение</button>
+        </form>
 
-    {% if latest_predictions %}
-
-        {% for p in latest_predictions %}
-            <p>
-                <strong>Вы: {{p.input_data}}</strong>
-                <p>Бот: {{p.output_data}}</p>
-            </p>
-        {% endfor %}
-
-    {% else %}
-    Нет предыдущих результатов.
-    {% endif %}
-
-</hr>
-
-<form action="{% url 'dialog_bot:predict' task.id %}" method="POST">
-
-    {% csrf_token %}
-
-    <textarea name="text" required="" placeholder="Введите текст" cols="70" rows="10"></textarea><br>
-    <button type="submit">Отправить сообщение</button>
-
-</form>
+    </div>
+</div>
 
 {% endblock %}
